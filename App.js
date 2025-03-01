@@ -1618,7 +1618,7 @@ const SearchBox = () => {
 const RestaurentContainer = (props) => {
   const { resData } = props;
   const { name, cloudinaryImageId, avgRatingString, cuisines, sla } =
-    resData.info;
+    resData?.info;
 
   return (
     <div className="restuarent-card">
@@ -1642,9 +1642,16 @@ const Body = () => {
     <div className="body">
       <SearchBox />
       <div className="restuarent-card-main">
-        {restaurantsList.map((restaurant) => (
-          <RestaurentContainer key={restaurant.info.id} resData={restaurant} />
-        ))}
+        {restaurantsList ? (
+          restaurantsList?.map((restaurant) => (
+            <RestaurentContainer
+              key={restaurant.info.id}
+              resData={restaurant}
+            />
+          ))
+        ) : (
+          <h1>Page Not Found!</h1>
+        )}
       </div>
     </div>
   );

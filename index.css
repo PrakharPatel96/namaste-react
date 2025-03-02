@@ -36,9 +36,12 @@
   padding: 5px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: stretch;
   background-color: lightgrey;
   margin: 5px;
+}
+.res-image {
+  height: 10rem;
 }
 .cuisines {
   word-wrap: break-word;
@@ -59,4 +62,7 @@
 }
 .footer-text {
   padding: 10px;
+}
+.filter-button {
+  cursor: pointer;
 }

@@ -15,7 +15,7 @@ const RestaurentContainer = (props) => {
       <h2>{name}</h2>
       <h3>{avgRatingString}</h3>
       <h4 className="cuisines">{cuisines.join()}</h4>
-      <h5>{sla.deliveryTime} Minutes</h5>
+      <h5>{sla?.deliveryTime} Minutes</h5>
     </div>
   );
 };

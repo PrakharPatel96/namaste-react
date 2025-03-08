@@ -88,3 +88,8 @@
   align-items: center;
   justify-content: start;
 }
+.user-container {
+  background-color: #f0f0f0;
+  border: 1px solid #f0f0f0;
+  margin: 10px;
+}

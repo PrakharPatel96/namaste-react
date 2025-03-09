@@ -1,40 +1,11 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { RES_API_URL } from "../utils/constants";
+import useRestuarentData from "../utils/customHooks/useRestuarentData";
 import Shimmer from "./Shimmer";
 
 const Restuarent = () => {
-  const [restuarentData, setRestuarentData] = useState([]);
-
   const { resId } = useParams();
 
-  useEffect(() => {
-    fetchRestuarentData();
-  }, []);
-
-  const fetchRestuarentData = async () => {
-    try {
-      const responseData = await fetch(`${RES_API_URL}&restaurantId=${resId}`);
-      if (!responseData.ok) {
-        console.log("Status false!");
-        setRestuarentData([]);
-        return;
-      }
-      const data = await responseData.json();
-
-      const resData = data?.data?.cards;
-
-      if (!resData) {
-        console.log("Res Data is not present");
-        setRestuarentData([]);
-        return;
-      }
-      setRestuarentData(resData);
-    } catch (err) {
-      console.log("Error in API call");
-      setRestuarentData([]);
-    }
-  };
+  const restuarentData = useRestuarentData(resId);
 
   if (restuarentData.length === 0) {
     return <Shimmer />;
@@ -57,7 +28,7 @@ const Restuarent = () => {
       <ul>
         Menu Items:{" "}
         {menuItems?.map((item) => (
-          <li>
+          <li key={item?.card?.info?.id}>
             {item?.card?.info?.name} -{" "}
             {item?.card?.info?.defaultPrice / 100 ||
               item?.card?.info?.price / 100}

@@ -3,6 +3,8 @@ import { Link } from "react-router";
 import SearchBox from "./Searchbox";
 import RestaurentContainer from "./RestuarentCard";
 import Shimmer from "./Shimmer";
+import { RES_LIST_URL } from "../utils/constants";
+import useRestuarentList from "../utils/customHooks/useRestuarentList";
 
 const Body = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,9 +13,7 @@ const Body = () => {
 
   const handleFetchData = async () => {
     try {
-      const data = await fetch(
-        "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9715987&lng=77.5945627&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
-      );
+      const data = await fetch(RES_LIST_URL);
       if (!data.ok) {
         console.log("API status failed");
         setResList([]);

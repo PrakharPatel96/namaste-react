@@ -93,3 +93,7 @@
   border: 1px solid #f0f0f0;
   margin: 10px;
 }
+.grocery-container {
+  display: flex;
+  flex-wrap: wrap;
+}

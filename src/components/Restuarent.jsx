@@ -1,8 +1,12 @@
+import { useState } from "react";
 import { useParams } from "react-router";
 import useRestuarentData from "../utils/customHooks/useRestuarentData";
 import Shimmer from "./Shimmer";
+import RestuarentItemsCategory from "./RestuarentItemsCategory";
 
 const Restuarent = () => {
+  const [showIndex, setShowIndex] = useState(null);
+
   const { resId } = useParams();
 
   const restuarentData = useRestuarentData(resId);
@@ -14,27 +18,34 @@ const Restuarent = () => {
   const { avgRatingString, costForTwoMessage, cuisines, name } =
     restuarentData[2]?.card?.card?.info;
 
-  const menuItems =
-    restuarentData[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card
-      ?.itemCards;
+  const items =
+    restuarentData[5]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(
+      (item) =>
+        item?.card?.card?.["@type"] ===
+        "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory",
+    );
+
+  const handleToggle = (index) => {
+    setShowIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
 
   return (
-    <div>
-      <h1>{name}</h1>
-      <h2>
+    <div className="text-center">
+      <h1 className="font-bold my-2 text-2xl">{name}</h1>
+      <h2 className="my-1 font-bold text-lg">
         {avgRatingString} - {costForTwoMessage}
       </h2>
-      <h3>{cuisines.join()}</h3>
-      <ul>
-        Menu Items:{" "}
-        {menuItems?.map((item) => (
-          <li key={item?.card?.info?.id}>
-            {item?.card?.info?.name} -{" "}
-            {item?.card?.info?.defaultPrice / 100 ||
-              item?.card?.info?.price / 100}
-          </li>
-        ))}
-      </ul>
+      <h3 className="my-1 font-bold text-lg">{cuisines.join()}</h3>
+      {items.map((element, index) => {
+        return (
+          <RestuarentItemsCategory
+            data={element?.card?.card}
+            key={element?.card?.card?.title}
+            showItems={index === showIndex}
+            onToggle={() => handleToggle(index)}
+          />
+        );
+      })}
     </div>
   );
 };

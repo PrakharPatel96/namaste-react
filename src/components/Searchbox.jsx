@@ -2,14 +2,20 @@ const SearchBox = (props) => {
   const { searchQuery, setSearchQuery, handleSearchRestuarents } = props;
 
   return (
-    <div className="search-box">
+    <div>
       <input
         type="text"
         placeholder="Search here..."
+        className="border border-solid border-black mx-1 py-2 rounded-lg"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
-      <button onClick={() => handleSearchRestuarents()}>Search</button>
+      <button
+        className="bg-green-300 px-4 py-2 rounded-lg"
+        onClick={() => handleSearchRestuarents()}
+      >
+        Search
+      </button>
     </div>
   );
 };

@@ -1,15 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router";
 import SearchBox from "./Searchbox";
 import RestaurentContainer from "./RestuarentCard";
 import Shimmer from "./Shimmer";
 import { RES_LIST_URL } from "../utils/constants";
 import useRestuarentList from "../utils/customHooks/useRestuarentList";
+import { withPromotedLabel } from "./RestuarentCard";
+import UserContext from "../utils/userContext";
 
 const Body = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [resList, setResList] = useState([]);
   const [filteredResList, setFileteredReslist] = useState([]);
+
+  const { loggedInUser, setUpdateUserName } = useContext(UserContext);
+
+  const RestuarentCardPromoted = withPromotedLabel(RestaurentContainer);
 
   const handleFetchData = async () => {
     try {
@@ -41,14 +47,14 @@ const Body = () => {
 
   const handleTopRatedCick = () => {
     let filteredList = filteredResList.filter(
-      (item) => item.info.avgRating > 4.5
+      (item) => item.info.avgRating > 4.5,
     );
     setFileteredReslist(filteredList);
   };
 
   const handleSearchRestuarents = () => {
     let filteredList = resList.filter((item) =>
-      item.info.name.toLowerCase().includes(searchQuery.toLowerCase())
+      item.info.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
     setFileteredReslist(filteredList);
   };
@@ -59,9 +65,9 @@ const Body = () => {
 
   return filteredResList.length > 0 ? (
     <div className="body">
-      <div className="filter-container">
+      <div className="flex items-center px-2">
         <button
-          className="filter-button"
+          className="px-4 py-2 bg-gray-400 m-2 rounded-lg"
           onClick={() => {
             handleTopRatedCick();
           }}
@@ -69,7 +75,7 @@ const Body = () => {
           Top Rated Restuarents
         </button>
         <button
-          className="filter-button"
+          className="px-4 py-2 bg-gray-400 m-2 rounded-lg"
           onClick={() => {
             setFileteredReslist(resList);
             setSearchQuery("");
@@ -82,15 +88,24 @@ const Body = () => {
           setSearchQuery={setSearchQuery}
           handleSearchRestuarents={handleSearchRestuarents}
         />
+        <label>User: </label>
+        <input
+          type="textbox"
+          onChange={(e) => setUpdateUserName(e.target.value)}
+        />
       </div>
-      <div className="restuarent-card-main">
+      <div className="flex flex-wrap">
         {filteredResList ? (
           filteredResList?.map((restaurant) => (
             <Link
               to={`/restuarent/${restaurant.info.id}`}
               key={restaurant.info.id}
             >
-              <RestaurentContainer resData={restaurant} />
+              {restaurant.info.avgRating > 4.5 ? (
+                <RestuarentCardPromoted resData={restaurant} />
+              ) : (
+                <RestaurentContainer resData={restaurant} />
+              )}
             </Link>
           ))
         ) : (
